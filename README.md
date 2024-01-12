@@ -86,7 +86,7 @@ In this project I have made 4 API
   Response:
   Body: All Institue data json will show 
 
-## docker Configuration 
+## Docker Configuration 
 1. I have downloaded docker desktop
 2. Install docker
 3. Login by gmail

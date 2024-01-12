@@ -36,25 +36,10 @@ public class IrsLoginConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
-//	@Bean
-//	public AuthenticationManager authenticationManager(HttpSecurity http, NoOpPasswordEncoder noOpPasswordEncoder)
-//			throws Exception {
-//		AuthenticationManagerBuilder authenticationManagerBuilder = http
-//				.getSharedObject(AuthenticationManagerBuilder.class);
-//		authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(noOpPasswordEncoder);
-//		return authenticationManagerBuilder.build();
-//	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
 	}
-
-//	@Bean
-//	public PasswordEncoder passwordEncoder() {
-//		System.out.println("Password encoder..............");
-//		return new BCryptPasswordEncoder(); // NoOpPasswordEncoder.getInstance();
-//	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,18 +48,14 @@ public class IrsLoginConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
-				.authorizeRequests(requests -> requests.antMatchers("/api/v1/generate-token", "/api/v1/user/")
-						.permitAll().antMatchers(HttpMethod.OPTIONS).permitAll()
-						// Restrict access based on roles
-						.antMatchers("/InstituteManagement/register").hasRole("ADMIN")
-						.antMatchers("/InstituteManagement/getAllInstitutes").hasAnyRole("NORMAL").anyRequest()
-						.authenticated())
-				.exceptionHandling(handling -> handling.authenticationEntryPoint(unAuthorizedHandler))
-				.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeRequests().antMatchers("/api/v1/generate-token").permitAll()
+			.antMatchers("InstituteManagement/register").hasRole("NORMAL")
+			.antMatchers(HttpMethod.GET, "InstituteManagement/getAllInstitutes").hasRole("ADMIN").anyRequest()
+			.authenticated().and().httpBasic().and().exceptionHandling()
+			.authenticationEntryPoint(unAuthorizedHandler).and()
+					.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-
+			http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		}
 }

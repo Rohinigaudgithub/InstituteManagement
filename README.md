@@ -1,7 +1,7 @@
 **Institute Management System**
 ## Overview
 
-This repository contains a RESTful API for an Institute Management System built using Java and Spring Boot.
+This repository contains a RESTful API for an Institute Management System built using Java and Spring Boot with docker 
 ## Basic Setup
 1. download java 8
 2. download STS (Spring Tool Suite)
@@ -85,3 +85,15 @@ In this project I have made 4 API
   URL: /InstituteManagement/getAllInstitutes
   Response:
   Body: All Institue data json will show 
+
+## docker Configuration 
+1. I have downloaded docker desktop
+2. Install docker
+3. Login by gmail
+4. create a docker file in my project
+5. Right click on your project -> click on Run As -> click on Maven Build
+6. After that I have refresh target folder and I received InstituteManagement-0.0.1-SNAPSHOT.jar
+7. I open cmd from my project directory and run this command docker build -t spring-boot-docker1 .
+8. after that I run docker images command and I received my docker Images detail this is
+   REPOSITORY            TAG       IMAGE ID       CREATED         SIZE
+   spring-boot-docker1   latest    6d3f2ef22812   8 seconds ago   568MB
